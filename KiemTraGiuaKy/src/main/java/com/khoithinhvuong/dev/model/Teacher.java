@@ -33,4 +33,72 @@ public class Teacher {
     @NotBlank
     @Column(nullable = false, length = 20)
     private String status;
+
+    public Teacher() {}
+
+    public Teacher(Long teacherId, String fullName, String phone, String email, String specialty, LocalDate hireDate, String status) {
+        this.teacherId = teacherId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.specialty = specialty;
+        this.hireDate = hireDate;
+        this.status = status;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -26,5 +26,64 @@ public class Results {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Clasz classEntity;
+    private Class classEntity;
+
+    public Results() {}
+
+    public Results(Long resultId, Double score, String grade, String comment, Student student, Class classEntity) {
+        this.resultId = resultId;
+        this.score = score;
+        this.grade = grade;
+        this.comment = comment;
+        this.student = student;
+        this.classEntity = classEntity;
+    }
+
+    public Long getResultId() {
+        return resultId;
+    }
+
+    public void setResultId(Long resultId) {
+        this.resultId = resultId;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Class getClassEntity() {
+        return classEntity;
+    }
+
+    public void setClassEntity(Class classEntity) {
+        this.classEntity = classEntity;
+    }
 }

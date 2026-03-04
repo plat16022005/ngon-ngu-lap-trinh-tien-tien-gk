@@ -25,6 +25,55 @@ public class Attendance {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Clasz classEntity;
+    private Class classEntity;
 
+    public Attendance() {}
+
+    public Attendance(Long attendanceId, LocalDate date, String status, Student student, Class classEntity) {
+        this.attendanceId = attendanceId;
+        this.date = date;
+        this.status = status;
+        this.student = student;
+        this.classEntity = classEntity;
+    }
+
+    public Long getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(Long attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Class getClassEntity() {
+        return classEntity;
+    }
+
+    public void setClassEntity(Class classEntity) {
+        this.classEntity = classEntity;
+    }
 }
