@@ -3,6 +3,7 @@ package com.khoithinhvuong.dev.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Check;
+
 import java.time.LocalDate;
 
 @Entity
@@ -12,28 +13,29 @@ public class Class {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "class_id")
     private Long classId;
 
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = false, length = 100)
+    @Column(name = "class_name", nullable = false, length = 100)
     private String className;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @NotNull
     @Min(1)
-    @Column(nullable = false)
+    @Column(name = "max_student", nullable = false)
     private Integer maxStudent;
 
     @NotBlank
-    @Column(nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @ManyToOne
@@ -41,12 +43,15 @@ public class Class {
     private Teacher teacher;
 
     @ManyToOne
-    @Column(name = "course_id", nullable = false)
-    private Long courseId;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     public Class() {}
 
-    public Class(Long classId, String className, LocalDate startDate, LocalDate endDate, Integer maxStudent, String status, Teacher teacher, Long courseId) {
+    public Class(Long classId, String className,
+                       LocalDate startDate, LocalDate endDate,
+                       Integer maxStudent, String status,
+                       Teacher teacher, Course course) {
         this.classId = classId;
         this.className = className;
         this.startDate = startDate;
@@ -54,7 +59,7 @@ public class Class {
         this.maxStudent = maxStudent;
         this.status = status;
         this.teacher = teacher;
-        this.courseId = courseId;
+        this.course = course;
     }
 
     public Long getClassId() {
@@ -113,11 +118,11 @@ public class Class {
         this.teacher = teacher;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

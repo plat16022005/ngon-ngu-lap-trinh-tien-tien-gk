@@ -1,0 +1,38 @@
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             version="3.0">
+
+    <persistence-unit name="myPU">
+
+        <class>model.Student</class>
+        <class>model.Teacher</class>
+        <class>model.Class</class>
+        <class>model.Course</class>
+        <class>model.Enrollment</class>
+        <class>model.Invoice</class>
+        <class>model.Payment</class>
+        <class>model.Results</class>
+        <class>model.Room</class>
+        <class>model.Schedule</class>
+        <class>model.Staff</class>
+        <class>model.UserAccount</class>
+
+        <properties>
+
+            <!-- Kết nối DB -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/ngonngulaptrinhtientiengk?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Asia/Ho_Chi_Minh"/>
+            <property name="jakarta.persistence.jdbc.user" value="root"/>
+            <property name="jakarta.persistence.jdbc.password" value="@Tuan16022005"/>
+
+            <!-- Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+            <!-- CÁI QUAN TRỌNG NHẤT -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>
