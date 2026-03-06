@@ -1,17 +1,16 @@
 package com.khoithinhvuong.dev.service;
 
+import com.khoithinhvuong.dev.config.TransactionManager;
 import com.khoithinhvuong.dev.model.Student;
 import com.khoithinhvuong.dev.repository.StudentRepository;
+import com.khoithinhvuong.dev.repository.jpa.JpaStudentRepository;
 
 import java.time.LocalDate;
 
 public class StudentService {
-    private final StudentRepository studentRepository;
-    public StudentService(StudentRepository studentRepository)
-    {
-        this.studentRepository = studentRepository;
-    }
-    public void CreateStudent(String address,
+    private static TransactionManager tx = new TransactionManager();
+    private StudentRepository studentRepository = new JpaStudentRepository(tx);
+    public Student CreateStudent(String address,
                               LocalDate dateOfBirth,
                               String email,
                               String fullName,
@@ -22,5 +21,6 @@ public class StudentService {
     {
         Student student = new Student(null, fullName, dateOfBirth, gender, phone, email, address, registrationDate, status);
         studentRepository.create(student);
+        return student;
     }
 }

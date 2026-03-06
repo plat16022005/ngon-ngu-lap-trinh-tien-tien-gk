@@ -28,36 +28,6 @@ public class MainFrame extends JFrame {
     private UserAccountService userAccountService;
     public static void main(String[] args) {
 
-        // 1️⃣ Tạo TransactionManager
-        TransactionManager tx = new TransactionManager();
-
-        // 2️⃣ Tạo Repository
-        UserAccountRepository repo =
-                new JpaUserAccountRepository(tx);
-        StudentRepository studentRepo = new JpaStudentRepository(tx);
-
-        // 3️⃣ Tạo Service
-        UserAccountService service =
-                new UserAccountService(tx, studentRepo, repo);
-        service.createStudentWithAccount("Pham Le Anh Tuan",
-                LocalDate.of(2005,2,16),
-                "male",
-                "0933577076",
-                "phamleanhtuan16022005@gmail.com",
-                "Tay Ninh",
-                LocalDate.now(),
-                "Active",
-                "anhtuan",
-                "dqwjwqiudjwqdwqdw");
-        // 4️⃣ Test DB
-        UserAccount user = service.getUserByUserName("anhtuan");
-
-        if (user != null) {
-            System.out.println("User ID: " + user.getUserId());
-        } else {
-            System.out.println("User not found");
-        }
-
         // 5️⃣ Mở UI
         SwingUtilities.invokeLater(() -> {
             new MainFrame().setVisible(true);
