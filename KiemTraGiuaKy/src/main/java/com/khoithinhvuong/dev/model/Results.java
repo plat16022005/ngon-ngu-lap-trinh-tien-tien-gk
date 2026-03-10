@@ -1,7 +1,7 @@
 package com.khoithinhvuong.dev.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "result")
@@ -26,17 +26,17 @@ public class Results {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Class classEntity;
+    private Clazz clazzEntity;
 
     public Results() {}
 
-    public Results(Long resultId, Double score, String grade, String comment, Student student, Class classEntity) {
+    public Results(Long resultId, Double score, String grade, String comment, Student student, Clazz clazzEntity) {
         this.resultId = resultId;
         this.score = score;
         this.grade = grade;
         this.comment = comment;
         this.student = student;
-        this.classEntity = classEntity;
+        this.clazzEntity = clazzEntity;
     }
 
     public Long getResultId() {
@@ -79,11 +79,11 @@ public class Results {
         this.student = student;
     }
 
-    public Class getClassEntity() {
-        return classEntity;
+    public Clazz getClassEntity() {
+        return clazzEntity;
     }
 
-    public void setClassEntity(Class classEntity) {
-        this.classEntity = classEntity;
+    public void setClassEntity(Clazz clazzEntity) {
+        this.clazzEntity = clazzEntity;
     }
 }

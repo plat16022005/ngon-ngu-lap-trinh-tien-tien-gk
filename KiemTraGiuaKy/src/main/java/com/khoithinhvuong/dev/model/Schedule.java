@@ -27,7 +27,7 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Class classEntity;
+    private Clazz clazzEntity;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
@@ -35,12 +35,12 @@ public class Schedule {
 
     public Schedule() {}
 
-    public Schedule(Long scheduleID, LocalDate date, LocalTime startTime, LocalTime endTime, Class classEntity, Room room) {
+    public Schedule(Long scheduleID, LocalDate date, LocalTime startTime, LocalTime endTime, Clazz clazzEntity, Room room) {
         this.scheduleID = scheduleID;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.classEntity = classEntity;
+        this.clazzEntity = clazzEntity;
         this.room = room;
     }
 
@@ -76,12 +76,12 @@ public class Schedule {
         this.endTime = endTime;
     }
 
-    public Class getClassEntity() {
-        return classEntity;
+    public Clazz getClassEntity() {
+        return clazzEntity;
     }
 
-    public void setClassEntity(Class classEntity) {
-        this.classEntity = classEntity;
+    public void setClassEntity(Clazz clazzEntity) {
+        this.clazzEntity = clazzEntity;
     }
 
     public Room getRoom() {

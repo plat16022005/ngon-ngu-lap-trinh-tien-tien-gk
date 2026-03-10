@@ -1,7 +1,9 @@
 package com.khoithinhvuong.dev.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 @Entity
@@ -25,16 +27,16 @@ public class Attendance {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Class classEntity;
+    private Clazz clazzEntity;
 
     public Attendance() {}
 
-    public Attendance(Long attendanceId, LocalDate date, String status, Student student, Class classEntity) {
+    public Attendance(Long attendanceId, LocalDate date, String status, Student student, Clazz clazzEntity) {
         this.attendanceId = attendanceId;
         this.date = date;
         this.status = status;
         this.student = student;
-        this.classEntity = classEntity;
+        this.clazzEntity = clazzEntity;
     }
 
     public Long getAttendanceId() {
@@ -69,11 +71,11 @@ public class Attendance {
         this.student = student;
     }
 
-    public Class getClassEntity() {
-        return classEntity;
+    public Clazz getClassEntity() {
+        return clazzEntity;
     }
 
-    public void setClassEntity(Class classEntity) {
-        this.classEntity = classEntity;
+    public void setClassEntity(Clazz clazzEntity) {
+        this.clazzEntity = clazzEntity;
     }
 }

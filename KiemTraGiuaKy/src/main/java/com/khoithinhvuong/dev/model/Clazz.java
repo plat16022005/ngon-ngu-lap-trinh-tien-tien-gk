@@ -1,7 +1,10 @@
 package com.khoithinhvuong.dev.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
@@ -9,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "class")
 @Check(constraints = "end_date >= start_date")
-public class Class {
+public class Clazz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,12 +49,12 @@ public class Class {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    public Class() {}
+    public Clazz() {}
 
-    public Class(Long classId, String className,
-                       LocalDate startDate, LocalDate endDate,
-                       Integer maxStudent, String status,
-                       Teacher teacher, Course course) {
+    public Clazz(Long classId, String className,
+                 LocalDate startDate, LocalDate endDate,
+                 Integer maxStudent, String status,
+                 Teacher teacher, Course course) {
         this.classId = classId;
         this.className = className;
         this.startDate = startDate;

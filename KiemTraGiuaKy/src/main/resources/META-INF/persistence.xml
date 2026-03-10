@@ -5,7 +5,7 @@
 
         <class>model.Student</class>
         <class>model.Teacher</class>
-        <class>model.Class</class>
+        <class>model.Clazz</class>
         <class>model.Course</class>
         <class>model.Enrollment</class>
         <class>model.Invoice</class>
