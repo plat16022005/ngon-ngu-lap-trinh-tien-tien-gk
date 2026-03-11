@@ -5,6 +5,7 @@ import com.khoithinhvuong.dev.model.Schedule;
 import com.khoithinhvuong.dev.repository.ScheduleRepository;
 import com.khoithinhvuong.dev.repository.jpa.JpaScheduleRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class ScheduleService {
@@ -31,6 +32,17 @@ public class ScheduleService {
         return scheduleRepository.findByClassId(classId);
     }
 
+    public List<Schedule> getTeacherSchedule(Long teacherId) {
+        return scheduleRepository.findByTeacherId(teacherId).stream()
+                .sorted(Comparator.comparing(Schedule::getDate)
+                        .thenComparing(Schedule::getStartTime))
+                .toList();
+    }
+
+    public List<Schedule> getAllSchedules() {
+        return scheduleRepository.findAll();
+    }
+
     public void updateSchedule( Schedule schedule)
     {
         scheduleRepository.update(schedule);
@@ -38,6 +50,7 @@ public class ScheduleService {
 
     public void deleteSchedule (Long scheduleId)
     {
+
         scheduleRepository.delete( scheduleId);
     }
 
@@ -45,5 +58,10 @@ public class ScheduleService {
     public void deleteSchedulesByClass(Long classId) {
         List<Schedule> classSchedules = getSchedulesByClass(classId);
         classSchedules.forEach(s -> deleteSchedule(s.getScheduleID()));
+    }
+
+    public Schedule getScheduleById(Long scheduleId)
+    {
+        return scheduleRepository.findById( scheduleId);
     }
 }

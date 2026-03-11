@@ -46,11 +46,13 @@ public class CourseService {
         courseRepository.delete(id);
     }
 
-    //lọc các khóa học đang hoạt động và sắp xếp theo học phí giảm dần
-    public List<Course> getActiveCoursesSortedByFee() {
+    //lọc các khóa học đang hoạt động và sắp xếp theo học phí giảm dần, tăng dần
+    public List<Course> getCoursesSortedByFee(boolean ascending) {
         return courseRepository.findAll().stream()
                 .filter(c -> "Active".equals(c.getStatus()))
-                .sorted((c1, c2) -> c2.getFee().compareTo(c1.getFee()))
+                .sorted((c1, c2) -> ascending
+                        ? c1.getFee().compareTo(c2.getFee())   // Tăng dần
+                        : c2.getFee().compareTo(c1.getFee()))  // Giảm dần
                 .toList();
     }
 }

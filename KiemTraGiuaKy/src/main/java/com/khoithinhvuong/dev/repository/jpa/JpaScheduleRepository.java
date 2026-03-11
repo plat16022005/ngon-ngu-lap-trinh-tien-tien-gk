@@ -44,6 +44,20 @@ public class JpaScheduleRepository implements ScheduleRepository {
     }
 
     @Override
+    public Schedule findById(Long id) {
+        return tx.runInTransaction(em -> em.find(Schedule.class, id));
+    }
+
+    @Override
+    public List<Schedule> findByTeacherId(Long teacherId) {
+        return tx.runInTransaction(em ->
+                em.createQuery("SELECT s FROM Schedule s WHERE s.classEntity.teacher.teacherId = :tid", Schedule.class)
+                        .setParameter("tid", teacherId)
+                        .getResultList()
+        );
+    }
+
+    @Override
     public void delete(Long scheduleId) {
         tx.runInTransaction(em -> {
             Schedule schedule = em.find(Schedule.class, scheduleId);

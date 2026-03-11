@@ -18,6 +18,8 @@ public class CourseForm extends JPanel {
     private JButton btnAdd, btnUpdate, btnDelete, btnClear;
     private JTextField txtSearch;
     private JButton btnSearch;
+    private JComboBox cbSortOrder;
+    private JButton btnSort;
 
     public CourseForm() {
         setLayout(new BorderLayout(10, 10));
@@ -121,6 +123,7 @@ public class CourseForm extends JPanel {
             } catch (Exception ex) { JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage()); }
         });
 
+        //Cập nhật
         btnUpdate.addActionListener(e -> {
             try {
                 if (txtId.getText().isEmpty()) throw new Exception("Hãy chọn một khóa học từ bảng!");
@@ -141,6 +144,8 @@ public class CourseForm extends JPanel {
             }
         });
 
+
+        //Xoá
         btnDelete.addActionListener(e -> {
             try {
                 if (txtId.getText().isEmpty())
@@ -179,6 +184,7 @@ public class CourseForm extends JPanel {
 
         btnClear.addActionListener(e -> clearFields());
 
+        //Tìm kiếm
         btnSearch.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
             List<Course> results = courseService.searchCourses(keyword); // Sử dụng hàm search dùng Stream API em đã viết
@@ -187,6 +193,22 @@ public class CourseForm extends JPanel {
             results.forEach(c -> tableModel.addRow(new Object[]{
                     c.getCourseId(), c.getCourseName(), c.getLevel(), c.getDuration(), c.getFee()
             }));
+        });
+
+        btnSort.addActionListener(e -> {
+            // Kiểm tra lựa chọn
+            boolean isAscending = cbSortOrder.getSelectedIndex() == 0;
+
+            tableModel.setRowCount(0);
+
+            List<Course> list = courseService.getCoursesSortedByFee(isAscending);
+
+            list.forEach(c -> tableModel.addRow(new Object[]{
+                    c.getCourseId(), c.getCourseName(), c.getLevel(), c.getDuration(), c.getFee()
+            }));
+
+            String message = isAscending ? "Đã sắp xếp giá thấp nhất lên đầu" : "Đã sắp xếp giá cao nhất lên đầu";
+            JOptionPane.showMessageDialog(this, message);
         });
     }
 
