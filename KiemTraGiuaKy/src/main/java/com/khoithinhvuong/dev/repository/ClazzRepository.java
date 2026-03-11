@@ -5,7 +5,8 @@ import com.khoithinhvuong.dev.model.Clazz;
 import java.util.List;
 
 public interface ClazzRepository {
-    void save(Clazz clazz);
+    void create(Clazz clazz);
+    void update(Clazz clazz);
     Clazz findById(Long id);
     List<Clazz> findAll();
     void delete (Long id);

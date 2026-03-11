@@ -1,85 +1,53 @@
 package com.khoithinhvuong.dev.repository.jpa;
 
-import com.khoithinhvuong.dev.config.JpaUtil;
+import com.khoithinhvuong.dev.config.TransactionManager;
 import com.khoithinhvuong.dev.model.Room;
 import com.khoithinhvuong.dev.repository.RoomRepository;
-import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public class JpaRoomRepository implements RoomRepository {
+    private final TransactionManager tx;
+    public JpaRoomRepository(TransactionManager tx) {
+        this.tx = tx;
+    }
     @Override
-    public void save(Room room) {
-        EntityManager entitymanager = JpaUtil.getEntityManager();
-        try
-        {
-            entitymanager.getTransaction().begin();
-            if (room.getRoomId() == null ){
-                entitymanager.persist(room);
-            }
-            else
-            {
-                entitymanager.merge(room);
-            }
-            entitymanager.getTransaction().commit();
-        }
-        catch (Exception e)
-        {
-            entitymanager.getTransaction().rollback();
-            e.printStackTrace();
-        }
-        finally
-        {
-            entitymanager.close();
-        }
+    public void create(Room room) {
+        tx.runInTransaction(
+                em -> {
+                    em.persist(room);
+                    return null;
+                });
     }
 
     @Override
-    public Room findById(Long id) {
-        EntityManager entitymanager = JpaUtil.getEntityManager();
-        try
-        {
-            return entitymanager.find(Room.class, id);
-        }
-        finally {
-            entitymanager.close();
-        }
+    public void update(Room room ){
+        tx.runInTransaction(
+                em -> {
+                    em.merge(room);
+                    return null;
+                });
+    }
+
+    @Override
+    public Room findById(Long roomId) {
+        return tx.runInTransaction( em-> em.find(Room.class, roomId));
     }
 
     @Override
     public List<Room> findAll() {
-        EntityManager entitymanager = JpaUtil.getEntityManager();
-        try
-        {
-            return entitymanager.createQuery("FROM Room", Room.class).getResultList();
-        }
-        finally {
-            entitymanager.close();
-        }
+        return tx.runInTransaction( em->em.createQuery("FROM Room", Room.class).getResultList());
     }
 
     @Override
-    public void delete(Long id) {
-        EntityManager entitymanager = JpaUtil.getEntityManager();
-        try
-        {
-            entitymanager.getTransaction().begin();
-            Room room = entitymanager.find(Room.class, id );
-            if( room != null )
-            {
-                entitymanager.remove( room ); //xoá khỏi Database
+    public void delete(Long roomId) {
+        tx.runInTransaction(em -> {
+            Room room = em.find(Room.class, roomId);
+            if (room != null) {
+                em.remove(room);
             }
-            entitymanager.getTransaction().commit();
-        }
-        catch( Exception e )
-        {
-            entitymanager.getTransaction().rollback();
-            e.printStackTrace();
-        }
-        finally
-        {
-            entitymanager.close();
-        }
+            return null;
+        });
     }
 
 }
