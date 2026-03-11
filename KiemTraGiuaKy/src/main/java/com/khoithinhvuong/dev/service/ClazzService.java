@@ -16,14 +16,41 @@ public class ClazzService
     private final ClazzRepository clazzRepository = new JpaClazzRepository(tx);
 
     public void createClass(String name, LocalDate start, LocalDate end, Integer max, Teacher teacher, Course course) {
+        //Ngày kết thúc phải sau ngày bắt đầu
+        if (end.isBefore(start))
+            throw new RuntimeException("Ngày kết thúc phải sau ngày bắt đầu!");
+
         Clazz clazz = new Clazz(null, name, start, end, max, "Open", teacher, course);
         clazzRepository.create(clazz);
     }
+
+    public Clazz getClassById(Long classId)
+    {
+        return clazzRepository.findById( classId);
+    }
+
     public List<Clazz> getAllClasses() {
         return clazzRepository.findAll();
     }
 
     public List<Clazz> getClassesByTeacher(Long teacherId) {
         return clazzRepository.findByTeacher(teacherId);
+    }
+
+    public void updateClass( Clazz clazz)
+    {
+        clazzRepository.update(clazz);
+    }
+
+    public void deleteClass (Long classId)
+    {
+        clazzRepository.delete( classId);
+    }
+
+    //Đếm số lượng lớp học của 1 giáo viên
+    public long countClassesByTeacher(Long teacherId) {
+        return clazzRepository.findAll().stream()
+                .filter(c -> c.getTeacher().getTeacherId().equals(teacherId))
+                .count();
     }
 }

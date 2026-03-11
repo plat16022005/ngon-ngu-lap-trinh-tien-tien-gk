@@ -41,7 +41,6 @@ public class JpaScheduleRepository implements ScheduleRepository {
     @Override
     public List<Schedule> findAll() {
             return tx.runInTransaction(em -> em.createQuery("FROM Schedule", Schedule.class).getResultList() );
-
     }
 
     @Override

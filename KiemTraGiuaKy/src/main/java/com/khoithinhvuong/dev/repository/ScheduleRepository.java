@@ -9,6 +9,6 @@ public interface ScheduleRepository {
     void update(Schedule schedule);
     List<Schedule> findByClassId(Long classId); //Tim lich hoc cua 1 lop
     List<Schedule> findAll();
-    void delete (Long id);
+    void delete(Long id);
 
 }

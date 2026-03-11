@@ -11,12 +11,39 @@ public class ScheduleService {
     private static final TransactionManager tx = new TransactionManager();
     private final ScheduleRepository scheduleRepository = new JpaScheduleRepository(tx);
 
-    public void createSchedule(Schedule schedule) {
-        // Cầm có thể dùng Stream API tại đây để kiểm tra phòng có bị trùng giờ không
-        scheduleRepository.create(schedule);
+    public void createSchedule(Schedule newSchedule) {
+        List <Schedule> allSchedules = scheduleRepository.findAll();
+
+        //kiểm tra trùng phòng và giờ : 2 khoảng thời gian (s1, e1), (s2, e2) chồng chéo khi s1 < e2 và s2 < e1
+        boolean isConflict = allSchedules.stream().anyMatch(
+                s -> s.getRoom().getRoomId().equals(newSchedule.getRoom().getRoomId()) &&
+                        s.getDate().equals(newSchedule.getDate()) &&
+                        newSchedule.getStartTime().isBefore(s.getEndTime()) &&
+                        s.getStartTime().isBefore(newSchedule.getEndTime()));
+
+        if (isConflict) {
+            throw new RuntimeException("Phòng học đã có lịch vào khung giờ này!");
+        }
+        scheduleRepository.create(newSchedule);
     }
 
     public List<Schedule> getSchedulesByClass(Long classId) {
         return scheduleRepository.findByClassId(classId);
+    }
+
+    public void updateSchedule( Schedule schedule)
+    {
+        scheduleRepository.update(schedule);
+    }
+
+    public void deleteSchedule (Long scheduleId)
+    {
+        scheduleRepository.delete( scheduleId);
+    }
+
+    //Xoá tất cả lịch học của lớp khi lớp đó bị xoá
+    public void deleteSchedulesByClass(Long classId) {
+        List<Schedule> classSchedules = getSchedulesByClass(classId);
+        classSchedules.forEach(s -> deleteSchedule(s.getScheduleID()));
     }
 }
