@@ -10,12 +10,15 @@ import java.util.List;
 
 public class AdminTeacherForm extends JPanel {
     private final TeacherService teacherService = new TeacherService();
+    private Long currentSelectedId = null; //biến lưu ngầm ID
+
     private JPanel mainPanel;
-    private JTextField txtId, txtFullName, txtPhone, txtEmail, txtHireDate;
+    private JTextField txtUsername, txtFullName, txtPhone, txtEmail, txtHireDate;
     private JTable tableTeacher;
     private DefaultTableModel tableModel;
     private JButton btnAdd, btnUpdate, btnDelete, btnClear, btnSearch;
     private JComboBox<String> cbSpecialty1, cbSpecialty2, cbStatus; // Cập nhật đúng kiểu dữ liệu
+    private JPasswordField txtPassword;
 
     public AdminTeacherForm() {
         add(mainPanel);
@@ -44,26 +47,34 @@ public class AdminTeacherForm extends JPanel {
     }
 
     private void initEvents() {
-        // 1. Thêm mới - Sử dụng dữ liệu từ ComboBox
+        // 1. Thêm mới
         btnAdd.addActionListener(e -> {
             try {
-                // Lưu ý: createTeacher ở Service cần cập nhật để nhận thêm Status nếu cần
-                teacherService.createTeacher(
+                //Tạo đối tượng Teacher tạm thời ( chưa có id )
+                Teacher newTeacher = new Teacher(null,
                         txtFullName.getText(), txtPhone.getText(), txtEmail.getText(),
-                        cbSpecialty1.getSelectedItem().toString(), // Lấy từ cbSpecialty1
-                        LocalDate.parse(txtHireDate.getText())
-                );
+                        cbSpecialty1.getSelectedItem().toString(),
+                        LocalDate.parse(txtHireDate.getText()), "Active");
+                String username = txtUsername.getText();
+                String password = new String(txtPassword.getPassword());
+
+                teacherService.createTeacherWithAccount(newTeacher, username, password);
                 refreshTable();
                 clearFields();
-                JOptionPane.showMessageDialog(this, "Thêm giáo viên thành công!");
-            } catch (Exception ex) { JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage()); }
+                JOptionPane.showMessageDialog(this, "Thêm GV và tạo tài khoản thành công!");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi: " + ex.getMessage());
+            }
         });
 
-        // 2. Chọn dòng - Đổ ngược dữ liệu lên ComboBox
+        // 2. Chọn dòng
         tableTeacher.getSelectionModel().addListSelectionListener(e -> {
             int row = tableTeacher.getSelectedRow();
             if (row != -1) {
-                txtId.setText(tableModel.getValueAt(row, 0).toString());
+                // Lưu id vào biến private để dùng cho update và delete
+                currentSelectedId = (Long) tableModel.getValueAt(row, 0);
+
+                txtUsername.setText("");
                 txtFullName.setText(tableModel.getValueAt(row, 1).toString());
                 txtPhone.setText(tableModel.getValueAt(row, 2).toString());
                 txtEmail.setText(tableModel.getValueAt(row, 3).toString());
@@ -76,22 +87,30 @@ public class AdminTeacherForm extends JPanel {
         // 3. Cập nhật
         btnUpdate.addActionListener(e -> {
             try {
-                if (txtId.getText().isEmpty()) return;
-                Teacher t = teacherService.getTeacherById(Long.parseLong(txtId.getText()));
+                if (currentSelectedId == null) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn giáo viên từ bảng!");
+                    return;
+                }
+
+                Teacher t = teacherService.getTeacherById(currentSelectedId);
                 t.setFullName(txtFullName.getText());
                 t.setPhone(txtPhone.getText());
                 t.setEmail(txtEmail.getText());
-                t.setSpecialty(cbSpecialty1.getSelectedItem().toString()); // Cập nhật từ cb1
+                t.setSpecialty(cbSpecialty1.getSelectedItem().toString());
                 t.setHireDate(LocalDate.parse(txtHireDate.getText()));
                 t.setStatus(cbStatus.getSelectedItem().toString()); // Cập nhật trạng thái
 
-                teacherService.updateTeacher(t);
+                // Lấy thông tin tài khoản mới (nếu có)
+                String newUsername = txtUsername.getText().trim();
+                String newPassword = new String(txtPassword.getPassword()).trim();
+
+                teacherService.updateTeacherWithAccount(t, newUsername, newPassword);
                 refreshTable();
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
             } catch (Exception ex) { JOptionPane.showMessageDialog(this, "Lỗi cập nhật: " + ex.getMessage()); }
         });
 
-        // 4. Tìm kiếm (Lọc) - Sử dụng cbSpecialty2
+        // 4. Tìm kiếm (Lọc)
         btnSearch.addActionListener(e -> {
             String specialty = cbSpecialty2.getSelectedItem().toString();
             List<Teacher> filtered = teacherService.searchBySpecialty(specialty);
@@ -100,24 +119,55 @@ public class AdminTeacherForm extends JPanel {
 
         // 5. Xóa
         btnDelete.addActionListener(e -> {
-            if (txtId.getText().isEmpty()) return;
+            if (currentSelectedId == null) return;
             int confirm = JOptionPane.showConfirmDialog(this, "Xóa giáo viên này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                teacherService.deleteTeacher(Long.parseLong(txtId.getText()));
-                refreshTable();
+                teacherService.deleteTeacher(currentSelectedId);                refreshTable();
                 clearFields();
             }
         });
 
+        //6. Làm mới
         btnClear.addActionListener(e -> {
             clearFields();
             refreshTable(); // Reset lại toàn bộ bảng khi làm mới
         });
+
+        //7. Nháy đúp chuột
+        tableTeacher.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = tableTeacher.getSelectedRow();
+                    String detail = String.format(
+                            "Chi tiết giáo viên\n" +
+                                    "--------------------------\n" +
+                                    "ID: %s\n" +
+                                    "Họ tên: %s\n" +
+                                    "SĐT: %s\n" +
+                                    "Email: %s\n" +
+                                    "Chuyên môn: %s\n" +
+                                    "Trạng thái: %s",
+                            tableModel.getValueAt(row, 0),
+                            tableModel.getValueAt(row, 1),
+                            tableModel.getValueAt(row, 2),
+                            tableModel.getValueAt(row, 3),
+                            tableModel.getValueAt(row, 4),
+                            tableModel.getValueAt(row, 6)
+                    );
+                    JOptionPane.showMessageDialog(null, detail, "Chi tiết giáo viên", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
     }
 
     private void clearFields() {
-        txtId.setText(""); txtFullName.setText(""); txtPhone.setText("");
-        txtEmail.setText(""); txtHireDate.setText("");
+        currentSelectedId = null; //Reset id ngầm
+        txtUsername.setText("");
+        txtFullName.setText("");
+        txtPhone.setText("");
+        txtEmail.setText("");
+        txtHireDate.setText("");
+        txtPassword.setText("");
         cbSpecialty1.setSelectedIndex(0);
         cbSpecialty2.setSelectedIndex(0);
         cbStatus.setSelectedIndex(0);
