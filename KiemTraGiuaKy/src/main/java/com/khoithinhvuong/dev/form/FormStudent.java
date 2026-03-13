@@ -1,14 +1,11 @@
 package com.khoithinhvuong.dev.form;
 
+import com.khoithinhvuong.dev.model.UserAccount;
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
-import java.awt.*;
-import java.util.Locale;
 
 public class FormStudent {
     private JButton myCourseButton;
-    private JButton myAttendanceButton;
+    private JButton enrollmentButton;
     private JButton myResultButton;
     private JButton paymentInvoiceButton;
     private JButton myScheduleButton;
@@ -17,12 +14,45 @@ public class FormStudent {
     private JPanel mainPanel;
     private JScrollPane contentPanel;
 
-    public JScrollPane getContentPanel() {
-        return contentPanel;
+    private final Long loggedInStudentId;
+
+    public FormStudent(UserAccount userAccount) {
+        this.loggedInStudentId = userAccount.getRelatedId();
+        setupListeners();
+        StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(loggedInStudentId);
+        showPanel(enrollmentForm.getEnrollmentPanel());
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
+    private void showPanel(JPanel newPanel) {
+        contentPanel.setViewportView(newPanel);
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    private void setupListeners() {
+        enrollmentButton.addActionListener(e -> {
+            StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(this.loggedInStudentId);
+            showPanel(enrollmentForm.getEnrollmentPanel());
+        });
+
+        paymentInvoiceButton.addActionListener(e -> {
+            StudentLogPaymentAndInvoiceForm paymentForm = new StudentLogPaymentAndInvoiceForm(loggedInStudentId);
+            showPanel(paymentForm.getPayAndInvoiceForm());
+        });
+
+
+        myCourseButton.addActionListener(e -> {
+
+        });
+
+
+        logoutButton.addActionListener(e -> {
+
+        });
+    }
 }

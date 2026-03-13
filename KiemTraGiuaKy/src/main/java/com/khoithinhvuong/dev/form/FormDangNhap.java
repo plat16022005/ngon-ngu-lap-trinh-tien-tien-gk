@@ -49,7 +49,7 @@ public class FormDangNhap {
                 switch (user.getRole()) {
                     case STUDENT:
                         newFrame.setTitle("Học sinh");
-                        FormStudent formStudent = new FormStudent();
+                        FormStudent formStudent = new FormStudent(user);
                         newFrame.setContentPane(formStudent.getMainPanel());
                         break;
                     case ADMIN:
@@ -59,7 +59,7 @@ public class FormDangNhap {
                         break;
                     case TEACHER:
                         newFrame.setTitle("Teacher");
-                        FormTeacher formTeacher = new FormTeacher();
+                        FormTeacher formTeacher = new FormTeacher(user);
                         newFrame.setContentPane(formTeacher.getMainPanel());
                         break;
                 }

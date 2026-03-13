@@ -31,6 +31,7 @@ public class FormAdmin {
     private AdminScheduleForm scheduleForm = new AdminScheduleForm();
     private AdminTeacherForm teacherForm = new AdminTeacherForm();
     private RoomForm roomForm = new RoomForm();
+    private AdminEnrollmentForm enrollmentForm = new AdminEnrollmentForm();
 
     public FormAdmin() {
         contentPanel.setLayout(cardLayout);
@@ -46,6 +47,15 @@ public class FormAdmin {
         classesButton.addActionListener(e -> showForm("CLAZZ"));
         roomButton.addActionListener(e -> showForm("ROOM"));
         scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
+        enrollmentButton.addActionListener(e -> showPanel(enrollmentForm.getAdminEnrollmentForm()));
+    }
+    public void showPanel(JPanel newPanel){
+        contentPanel.removeAll();
+
+        contentPanel.add(newPanel);
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     public void showForm(String cardName) {

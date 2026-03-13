@@ -1,5 +1,7 @@
 package com.khoithinhvuong.dev.form;
 
+import com.khoithinhvuong.dev.model.UserAccount;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
@@ -14,14 +16,26 @@ public class FormTeacher {
     private JButton attendanceButton;
     private JButton enterResultButton;
     private JButton logoutButton;
-    private JPanel contentPanel;
-
-    public JPanel getContentPanel() {
-        return contentPanel;
-    }
+    private JScrollPane  contentPanel;
 
     public JPanel getMainPanel() {
         return mainPanel;
+    }
+
+    private final Long loginUserId;
+
+    public FormTeacher(UserAccount userAccount){
+        this.loginUserId = userAccount.getRelatedId();
+
+        TeacherScheduleForm teacherScheduleForm = new TeacherScheduleForm(loginUserId);
+        showPanel(teacherScheduleForm.getMainPanel());
+    }
+
+    private void showPanel(JPanel newPanel) {
+        contentPanel.setViewportView(newPanel);
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
 }

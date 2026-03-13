@@ -21,6 +21,10 @@ public class TeacherScheduleForm extends JPanel {
     private JButton btnShowAll;
     private DefaultTableModel tableModel;
 
+    public JPanel getMainPanel(){
+        return  mainPanel;
+    }
+
     // 3. Constructor nhận vào ID của giáo viên đang đăng nhập
     public TeacherScheduleForm(Long teacherId) {
         add(mainPanel); // Gắn panel từ file .form vào

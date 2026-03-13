@@ -29,6 +29,10 @@ public class ClazzService
         return clazzRepository.findById( classId);
     }
 
+    public List<Clazz> getClassByCourse(Long courseId){
+        return clazzRepository.findByCourse(courseId);
+    }
+
     public List<Clazz> getAllClasses() {
         return clazzRepository.findAll();
     }
@@ -37,7 +41,6 @@ public class ClazzService
         return clazzRepository.findByTeacher(teacherId);
     }
 
-    //Lấy danh sách lớp theo khoá học tương ứng
     public List<Clazz> getClassesByCourse(Long courseId) {
         return clazzRepository.findByCourse(courseId);
     }
