@@ -4,7 +4,11 @@ import com.khoithinhvuong.dev.config.ServiceFactory;
 import com.khoithinhvuong.dev.service.AuthService;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
+import java.awt.*;
 import java.time.LocalDate;
+import java.util.Locale;
 
 public class FormDangKy {
     private AuthService authService = new AuthService();
@@ -22,8 +26,8 @@ public class FormDangKy {
     private JComboBox gioitinhCombo;
     private JButton dangkyButton;
     private JButton quaylaiButton;
-    public FormDangKy()
-    {
+
+    public FormDangKy() {
         quaylaiButton.addActionListener(e -> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
 
@@ -89,7 +93,9 @@ public class FormDangKy {
             }
         });
     }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
+
 }

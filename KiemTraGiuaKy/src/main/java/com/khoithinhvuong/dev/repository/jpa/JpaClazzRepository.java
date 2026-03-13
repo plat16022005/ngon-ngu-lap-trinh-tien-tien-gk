@@ -58,4 +58,13 @@ public class JpaClazzRepository implements ClazzRepository {
                 .stream().filter(c->c.getTeacher().getTeacherId().equals(teacherId))
                 .collect(Collectors.toList());
     }
+
+    //Lọc lớp theo khoá học
+    @Override
+    public List<Clazz> findByCourse(Long courseId) {
+        return tx.runInTransaction(em ->
+                em.createQuery("SELECT c FROM Clazz c WHERE c.course.courseId = :cid", Clazz.class)
+                        .setParameter("cid", courseId)
+                        .getResultList());
+    }
 }

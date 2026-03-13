@@ -14,7 +14,7 @@ public class TeacherScheduleForm extends JPanel {
     private List<Schedule> fullScheduleList;
 
     // 2. Các thành phần kết nối từ GUI Designer
-    private JPanel panel1;
+    private JPanel mainPanel;
     private JTable table1;
     private JComboBox cbClassFilter;
     private JButton btnFilter;
@@ -23,7 +23,7 @@ public class TeacherScheduleForm extends JPanel {
 
     // 3. Constructor nhận vào ID của giáo viên đang đăng nhập
     public TeacherScheduleForm(Long teacherId) {
-        add(panel1); // Gắn panel từ file .form vào
+        add(mainPanel); // Gắn panel từ file .form vào
         initTable();
         initEvents();
         loadMySchedule(teacherId);

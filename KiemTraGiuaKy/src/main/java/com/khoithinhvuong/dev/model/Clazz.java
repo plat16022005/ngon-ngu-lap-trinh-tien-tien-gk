@@ -65,6 +65,11 @@ public class Clazz {
         this.course = course;
     }
 
+    @Override
+    public String toString() {
+        return this.className;
+    }
+
     public Long getClassId() {
         return classId;
     }

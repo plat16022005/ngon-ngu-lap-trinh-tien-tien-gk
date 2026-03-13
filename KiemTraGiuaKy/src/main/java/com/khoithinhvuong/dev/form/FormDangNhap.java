@@ -8,7 +8,11 @@ import com.khoithinhvuong.dev.service.StudentService;
 import com.khoithinhvuong.dev.service.UserAccountService;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
+import java.awt.*;
 import java.io.Console;
+import java.util.Locale;
 
 public class FormDangNhap {
     private AuthService authService = new AuthService();
@@ -37,15 +41,13 @@ public class FormDangNhap {
             frame.dispose(); // đóng form login
         });
         dangnhapButton.addActionListener(e -> {
-            if (authService.login(usernameBox.getText(), passwordBox.getText()))
-            {
+            if (authService.login(usernameBox.getText(), passwordBox.getText())) {
                 UserAccount user = userAccountService.getUserByUserName(usernameBox.getText());
 
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
                 JFrame newFrame = new JFrame();
-                switch (user.getRole())
-                {
-                    case STUDENT :
+                switch (user.getRole()) {
+                    case STUDENT:
                         newFrame.setTitle("Học sinh");
                         FormStudent formStudent = new FormStudent();
                         newFrame.setContentPane(formStudent.getMainPanel());
@@ -72,14 +74,14 @@ public class FormDangNhap {
                 newFrame.setVisible(true);
 
                 frame.dispose();
-            }
-            else
-            {
+            } else {
                 System.out.println("Đăng nhập thất bại");
             }
         });
     }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
+
 }

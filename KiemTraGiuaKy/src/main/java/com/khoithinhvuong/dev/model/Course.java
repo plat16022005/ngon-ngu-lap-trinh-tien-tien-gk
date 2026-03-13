@@ -48,6 +48,11 @@ public class Course {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return this.courseName;
+    }
+
     public Long getCourseId() {
         return courseId;
     }

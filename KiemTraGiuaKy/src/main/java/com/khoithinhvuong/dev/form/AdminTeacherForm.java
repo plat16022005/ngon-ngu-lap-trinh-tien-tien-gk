@@ -5,15 +5,19 @@ import com.khoithinhvuong.dev.service.TeacherService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AdminTeacherForm extends JPanel {
     private final TeacherService teacherService = new TeacherService();
     private Long currentSelectedId = null; //biến lưu ngầm ID
+    private JFormattedTextField txtHireDate;
 
     private JPanel mainPanel;
-    private JTextField txtUsername, txtFullName, txtPhone, txtEmail, txtHireDate;
+    private JTextField txtUsername, txtFullName, txtPhone, txtEmail;
     private JTable tableTeacher;
     private DefaultTableModel tableModel;
     private JButton btnAdd, btnUpdate, btnDelete, btnClear, btnSearch;
@@ -22,6 +26,7 @@ public class AdminTeacherForm extends JPanel {
 
     public AdminTeacherForm() {
         add(mainPanel);
+        setupDatePicker();
         initTable();
         initEvents();
         refreshTable();
@@ -40,6 +45,20 @@ public class AdminTeacherForm extends JPanel {
                 t.getTeacherId(), t.getFullName(), t.getPhone(),
                 t.getEmail(), t.getSpecialty(), t.getHireDate(), t.getStatus() // Thêm Status vào bảng
         }));
+    }
+
+    private void setupDatePicker() {
+        try {
+            // Định dạng: 4 số năm - 2 số tháng - 2 số ngày
+            MaskFormatter dateMask = new MaskFormatter("####-##-##");
+            dateMask.setPlaceholderCharacter('_');
+            dateMask.install(txtHireDate);
+
+            // Tự động điền ngày hôm nay
+            txtHireDate.setText(LocalDate.now().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshTable() {
@@ -107,7 +126,9 @@ public class AdminTeacherForm extends JPanel {
                 teacherService.updateTeacherWithAccount(t, newUsername, newPassword);
                 refreshTable();
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-            } catch (Exception ex) { JOptionPane.showMessageDialog(this, "Lỗi cập nhật: " + ex.getMessage()); }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi cập nhật: " + ex.getMessage());
+            }
         });
 
         // 4. Tìm kiếm (Lọc)
@@ -122,7 +143,8 @@ public class AdminTeacherForm extends JPanel {
             if (currentSelectedId == null) return;
             int confirm = JOptionPane.showConfirmDialog(this, "Xóa giáo viên này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                teacherService.deleteTeacher(currentSelectedId);                refreshTable();
+                teacherService.deleteTeacher(currentSelectedId);
+                refreshTable();
                 clearFields();
             }
         });
@@ -134,8 +156,8 @@ public class AdminTeacherForm extends JPanel {
         });
 
         //7. Nháy đúp chuột
-        tableTeacher.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent e) {
+        tableTeacher.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int row = tableTeacher.getSelectedRow();
                     String detail = String.format(
@@ -161,16 +183,22 @@ public class AdminTeacherForm extends JPanel {
     }
 
     private void clearFields() {
-        currentSelectedId = null; //Reset id ngầm
+        currentSelectedId = null;
         txtUsername.setText("");
         txtFullName.setText("");
         txtPhone.setText("");
         txtEmail.setText("");
-        txtHireDate.setText("");
         txtPassword.setText("");
-        cbSpecialty1.setSelectedIndex(0);
-        cbSpecialty2.setSelectedIndex(0);
-        cbStatus.setSelectedIndex(0);
+
+        // Reset ngày về ngày hôm nay
+        txtHireDate.setText(java.time.LocalDate.now().toString());
+
+        // Kiểm tra xem có dữ liệu mới cho chọn Index 0
+        if (cbSpecialty1.getItemCount() > 0) cbSpecialty1.setSelectedIndex(0);
+        if (cbSpecialty2.getItemCount() > 0) cbSpecialty2.setSelectedIndex(0);
+        if (cbStatus.getItemCount() > 0) cbStatus.setSelectedIndex(0);
+
         tableTeacher.clearSelection();
     }
+
 }

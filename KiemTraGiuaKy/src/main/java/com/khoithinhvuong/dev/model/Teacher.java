@@ -46,6 +46,11 @@ public class Teacher {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return this.fullName;
+    }
+
     public Long getTeacherId() {
         return teacherId;
     }

@@ -1,6 +1,10 @@
 package com.khoithinhvuong.dev.form;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
+import java.awt.*;
+import java.util.Locale;
 
 public class FormTeacher {
     private JPanel mainPanel;
@@ -15,7 +19,8 @@ public class FormTeacher {
     public JPanel getContentPanel() {
         return contentPanel;
     }
-    public JPanel getMainPanel(){
+
+    public JPanel getMainPanel() {
         return mainPanel;
     }
 

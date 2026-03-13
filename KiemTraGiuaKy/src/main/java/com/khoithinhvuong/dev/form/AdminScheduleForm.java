@@ -11,6 +11,8 @@ import com.khoithinhvuong.dev.service.TeacherService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,20 +27,52 @@ public class AdminScheduleForm extends JPanel {
     private JPanel mainPanel;
     private JComboBox<Clazz> cbClazz;
     private JComboBox<Room> cbRoom;
-    private JTextField txtDate, txtStartTime, txtEndTime, txtNote;
+    private JTextField  txtNote;
     private JTable table1;
     private DefaultTableModel tableModel;
     private JButton btnAdd, btnUpdate, btnDelete, btnClear;
     private JTextField txtId;
     private JButton btnFilter;
     private JComboBox cbTeacherFilter;
+    private JFormattedTextField txtDate, txtStartTime, txtEndTime;
 
     public AdminScheduleForm() {
-        add(mainPanel); // Gắn panel từ GUI Designer vào JPanel chính
+        setLayout(new BorderLayout());
+
+        if (mainPanel != null) {
+            add(mainPanel, BorderLayout.CENTER);
+        }
+
         initTable();
         initData();
+        setupInputMasks();
         initEvents();
         refreshTable();
+    }
+
+    private void setupInputMasks()
+    {
+        try {
+            // 1. Nhập ngày học
+            MaskFormatter dateMask = new MaskFormatter("####-##-##");
+            dateMask.setPlaceholderCharacter('_');
+            dateMask.install(txtDate);
+
+            // 2. Nhập giờ học và kết thuúc
+            MaskFormatter timeMask = new MaskFormatter("##:##");
+            timeMask.setPlaceholderCharacter('_');
+
+            timeMask.install(txtStartTime);
+            timeMask.install(txtEndTime);
+
+            // 3. gợi ý giá trị
+            txtDate.setText(LocalDate.now().toString());
+            txtStartTime.setText("08:00");
+            txtEndTime.setText("10:00");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initTable() {
@@ -47,7 +81,11 @@ public class AdminScheduleForm extends JPanel {
         table1.setModel(tableModel);
     }
 
-    private void initData() {
+    public void initData() {
+        //1.Dọn sạch trước khi nạp
+        cbClazz.removeAllItems();
+        cbRoom.removeAllItems();
+        cbTeacherFilter.removeAllItems();
         // Load danh sách Lớp và Phòng vào Combobox
         clazzService.getAllClasses().forEach(cbClazz::addItem);
         roomService.getAllRooms().forEach(cbRoom::addItem);
@@ -161,7 +199,29 @@ public class AdminScheduleForm extends JPanel {
         });
     }
 
-    private void refreshTable() {
+    //Lọc lấy lịch học theo lớp
+    public void filterByClass(Long classId) {
+        // 1. Lọc dữ liệu bảng
+        tableModel.setRowCount(0);
+        List<Schedule> list = scheduleService.getSchedulesByClass(classId);
+        list.forEach(s -> tableModel.addRow(new Object[]{
+                s.getScheduleID(), s.getClassEntity().getClassName(),
+                s.getRoom().getRoomName(), s.getDate(), s.getStartTime(), s.getEndTime()
+        }));
+
+        // 2. Tự động chọn đúng Lớp trên ComboBox
+        if (cbClazz != null) {
+            for (int i = 0; i < cbClazz.getItemCount(); i++) {
+                Clazz item = cbClazz.getItemAt(i);
+                if (item.getClassId().equals(classId)) {
+                    cbClazz.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void refreshTable() {
         tableModel.setRowCount(0);
         List<Schedule> list = scheduleService.getAllSchedules();
         list.forEach(s -> tableModel.addRow(new Object[]{
@@ -181,10 +241,13 @@ public class AdminScheduleForm extends JPanel {
         txtStartTime.setText("");
         txtEndTime.setText("");
         txtNote.setText("");
-        cbClazz.setSelectedIndex(0);
-        cbRoom.setSelectedIndex(0);
-        cbTeacherFilter.setSelectedIndex(0);
+
+        setupInputMasks();
+
+        if(cbClazz.getItemCount() > 0) cbClazz.setSelectedIndex(0);
+        if(cbRoom.getItemCount() > 0) cbRoom.setSelectedIndex(0);
         table1.clearSelection();
+        cbTeacherFilter.setSelectedIndex(0);
     }
 
     public JPanel getMainPanel()

@@ -1,6 +1,7 @@
 package com.khoithinhvuong.dev.form;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class FormAdmin {
     private JPanel mainPanel;
@@ -14,11 +15,68 @@ public class FormAdmin {
     private JPanel contentPanel;
     private JButton logoutButton;
     private JButton attendanceButton;
+    private JButton scheduleButton;
 
     public JPanel getContentPanel() {
         return contentPanel;
     }
-    public JPanel getMainPanel(){
+
+    public JPanel getMainPanel() {
         return mainPanel;
+    }
+
+    private CardLayout cardLayout = new CardLayout();
+    private CourseForm courseForm = new CourseForm();
+    private AdminClazzForm clazzForm = new AdminClazzForm();
+    private AdminScheduleForm scheduleForm = new AdminScheduleForm();
+    private AdminTeacherForm teacherForm = new AdminTeacherForm();
+    private RoomForm roomForm = new RoomForm();
+
+    public FormAdmin() {
+        contentPanel.setLayout(cardLayout);
+        contentPanel.add(courseForm, "COURSE");
+        contentPanel.add(clazzForm, "CLAZZ");
+        contentPanel.add(scheduleForm, "SCHEDULE");
+        contentPanel.add(teacherForm, "TEACHER");
+        contentPanel.add(roomForm, "ROOM");
+
+        // Sự kiện Menu bên trái
+        courseButton.addActionListener(e -> showForm("COURSE"));
+        teacherButton.addActionListener(e -> showForm("TEACHER"));
+        classesButton.addActionListener(e -> showForm("CLAZZ"));
+        roomButton.addActionListener(e -> showForm("ROOM"));
+        scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
+    }
+
+    public void showForm(String cardName) {
+        clazzForm.initData();
+        switch (cardName) {
+            case "CLAZZ":
+                clazzForm.initData();
+                clazzForm.refreshTable();
+                break;
+            case "SCHEDULE":
+                scheduleForm.initData();
+                scheduleForm.refreshTable();
+                break;
+            case "TEACHER":
+                break;
+            case "ROOM":
+                roomForm.refreshTable();
+        }
+        cardLayout.show(contentPanel, cardName);
+    }
+
+    // Hỗ trợ điều hướng kèm dữ liệu
+    public void showClassOfCourse(Long courseId) {
+        clazzForm.initData();
+        clazzForm.filterByCourse(courseId); // Gọi hàm lọc ở Form Lớp
+        cardLayout.show(contentPanel, "CLAZZ");
+    }
+
+    public void showScheduleOfClass(Long classId) {
+        scheduleForm.initData();
+        scheduleForm.filterByClass(classId); // Gọi hàm lọc ở Form Lịch
+        cardLayout.show(contentPanel, "SCHEDULE");
     }
 }

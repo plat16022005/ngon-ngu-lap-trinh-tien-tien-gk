@@ -32,12 +32,12 @@ public class JpaScheduleRepository implements ScheduleRepository {
 
     @Override
     public List<Schedule> findByClassId(Long classId) {
-        return tx.runInTransaction(em -> em.createQuery("SELECT s FROM Schedule s WHERE s.classEntity.classId = :cid", Schedule.class)
+        return tx.runInTransaction(em ->
+                em.createQuery("SELECT s FROM Schedule s WHERE s.clazzEntity.classId = :cid", Schedule.class)
                         .setParameter("cid", classId)
                         .getResultList()
         );
     }
-
     @Override
     public List<Schedule> findAll() {
             return tx.runInTransaction(em -> em.createQuery("FROM Schedule", Schedule.class).getResultList() );
@@ -51,7 +51,7 @@ public class JpaScheduleRepository implements ScheduleRepository {
     @Override
     public List<Schedule> findByTeacherId(Long teacherId) {
         return tx.runInTransaction(em ->
-                em.createQuery("SELECT s FROM Schedule s WHERE s.classEntity.teacher.teacherId = :tid", Schedule.class)
+                em.createQuery("SELECT s FROM Schedule s WHERE s.clazzEntity.teacher.teacherId = :tid", Schedule.class)
                         .setParameter("tid", teacherId)
                         .getResultList()
         );

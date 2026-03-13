@@ -36,6 +36,11 @@ public class Room {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return this.roomName;
+    }
+
     public Long getRoomId() {
         return roomId;
     }

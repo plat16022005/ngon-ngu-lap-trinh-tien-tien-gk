@@ -37,6 +37,11 @@ public class ClazzService
         return clazzRepository.findByTeacher(teacherId);
     }
 
+    //Lấy danh sách lớp theo khoá học tương ứng
+    public List<Clazz> getClassesByCourse(Long courseId) {
+        return clazzRepository.findByCourse(courseId);
+    }
+
     public void updateClass( Clazz clazz)
     {
         clazzRepository.update(clazz);

@@ -5,6 +5,7 @@ import com.khoithinhvuong.dev.service.RoomService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.List;
 
 public class RoomForm extends JPanel {
@@ -30,7 +31,7 @@ public class RoomForm extends JPanel {
         tableRoom.setModel(tableModel);
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         tableModel.setRowCount(0);
         List<Room> list = roomService.getAllRooms(); // Lấy dữ liệu từ DB
 
@@ -102,10 +103,16 @@ public class RoomForm extends JPanel {
     }
 
     private void clearFields() {
-        txtId.setText(""); txtName.setText(""); txtCapacity.setText("");
-        txtLocation.setText(""); cbStatus.setSelectedIndex(0);
+        txtId.setText("");
+        txtName.setText("");
+        txtCapacity.setText("");
+        txtLocation.setText("");
+        cbStatus.setSelectedIndex(0);
         tableRoom.clearSelection();
     }
 
-    public JPanel getMainPanel() { return mainPanel; }
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
 }

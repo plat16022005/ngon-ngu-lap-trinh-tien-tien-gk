@@ -10,6 +10,8 @@ public interface ClazzRepository {
     Clazz findById(Long id);
     List<Clazz> findAll();
     void delete (Long id);
-    // Hàm ghi điểm: Lọc lớp học theo giáo viên (Sử dụng cho Role Teacher)
+    // Lọc lớp học theo giáo viên (Sử dụng cho Role Teacher)
     List<Clazz> findByTeacher(Long teacherId);
+    //Lọc theo khoá học
+    List<Clazz> findByCourse(Long courseId);
 }

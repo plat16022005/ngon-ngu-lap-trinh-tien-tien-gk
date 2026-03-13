@@ -11,14 +11,14 @@ public class TeacherMyClassesForm extends JPanel {
     private final ClazzService clazzService = new ClazzService();
     private final Long currentTeacherId; // Lưu ID để dùng cho nút Refresh
 
-    private JPanel panel1;
+    private JPanel mainPanel;
     private JTable tableClasses;
     private DefaultTableModel tableModel;
     private JButton btnRefresh;
 
     public TeacherMyClassesForm(Long teacherId) {
         this.currentTeacherId = teacherId;
-        add(panel1);
+        add(mainPanel);
         initTable();
         initEvents();
         loadData(teacherId);
@@ -54,4 +54,5 @@ public class TeacherMyClassesForm extends JPanel {
                 c.getStatus()
         }));
     }
+
 }
