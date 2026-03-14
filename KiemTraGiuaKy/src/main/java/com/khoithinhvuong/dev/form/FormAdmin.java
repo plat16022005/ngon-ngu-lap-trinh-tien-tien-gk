@@ -18,7 +18,7 @@ public class FormAdmin {
     private JButton enrollmentButton;
     private JPanel contentPanel;
     private JButton logoutButton;
-    private JButton attendanceButton;
+    private JButton staffButton;
     private JButton scheduleButton;
 
     public JPanel getContentPanel() {
@@ -36,6 +36,7 @@ public class FormAdmin {
     private AdminTeacherForm teacherForm = new AdminTeacherForm();
     private RoomForm roomForm = new RoomForm();
     private AdminEnrollmentForm enrollmentForm = new AdminEnrollmentForm();
+    private AdminStaffForm staffForm = new AdminStaffForm();
 
     public FormAdmin() {
         contentPanel.setLayout(cardLayout);
@@ -44,6 +45,7 @@ public class FormAdmin {
         contentPanel.add(scheduleForm, "SCHEDULE");
         contentPanel.add(teacherForm, "TEACHER");
         contentPanel.add(roomForm, "ROOM");
+        contentPanel.add(staffForm.getMainPanel(), "STAFF");
 
         // Sự kiện Menu bên trái
         courseButton.addActionListener(e -> showForm("COURSE"));
@@ -52,6 +54,7 @@ public class FormAdmin {
         roomButton.addActionListener(e -> showForm("ROOM"));
         scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
 //        enrollmentButton.addActionListener(e -> showPanel(enrollmentForm.getAdminEnrollmentForm()));
+        staffButton.addActionListener(e -> showForm("STAFF"));
         logoutButton.addActionListener(e -> {
 
             Window window = SwingUtilities.getWindowAncestor(mainPanel);
@@ -78,21 +81,31 @@ public class FormAdmin {
     }
 
     public void showForm(String cardName) {
-        clazzForm.initData();
+
         switch (cardName) {
+
             case "CLAZZ":
                 clazzForm.initData();
                 clazzForm.refreshTable();
                 break;
+
             case "SCHEDULE":
                 scheduleForm.initData();
                 scheduleForm.refreshTable();
                 break;
+
             case "TEACHER":
                 break;
+
             case "ROOM":
                 roomForm.refreshTable();
+                break;
+
+            case "STAFF":
+                staffForm.refreshTable();
+                break;
         }
+
         cardLayout.show(contentPanel, cardName);
     }
 

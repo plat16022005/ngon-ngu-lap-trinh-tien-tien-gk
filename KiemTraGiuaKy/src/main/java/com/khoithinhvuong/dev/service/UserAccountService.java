@@ -34,52 +34,21 @@ public class UserAccountService {
         userAccountRepository.create(account);
         return account;
     }
-//    public void createStudentWithAccount(
-//            String fullName,
-//            LocalDate dateOfBirth,
-//            String gender,
-//            String phone,
-//            String email,
-//            String address,
-//            LocalDate registrationDate,
-//            String status,
-//            String username,
-//            String passwordHash
-//    )
-//    {
-//
-//        tx.runInTransaction(em -> {
-//
-//            // 1️⃣ Tạo Student
-//            Student student = new Student(
-//                    null,
-//                    fullName,
-//                    dateOfBirth,
-//                    gender,
-//                    phone,
-//                    email,
-//                    address,
-//                    registrationDate,
-//                    status
-//            );
-//
-//            studentRepository.create(student);
-//
-//            // ID đã có sau persist
-//            Long generatedId = student.getStudentId();
-//
-//            // 2️⃣ Tạo Account
-//            UserAccount account = new UserAccount(
-//                    null,
-//                    username,
-//                    passwordHash,
-//                    UserAccount.Role.STUDENT,
-//                    generatedId
-//            );
-//
-//            userAccountRepository.create(account);
-//
-//            return null;
-//        });
-//    }
+    public UserAccount createAdminAccount(
+            String username,
+            String passwordHash,
+            Long generatedId
+    )
+    {
+        UserAccount account = new UserAccount(
+                null,
+                username,
+                passwordHash,
+                UserAccount.Role.ADMIN,
+                generatedId
+        );
+
+        userAccountRepository.create(account);
+        return account;
+    }
 }

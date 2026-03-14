@@ -23,6 +23,9 @@ public class StudentService {
         studentRepository.create(student);
         return student;
     }
-
+    public Student findStudentById(Long id)
+    {
+        return studentRepository.findById(id);
+    }
 
 }
