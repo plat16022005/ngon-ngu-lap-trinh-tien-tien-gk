@@ -61,4 +61,7 @@ public class ClazzService
                 .filter(c -> c.getTeacher().getTeacherId().equals(teacherId))
                 .count();
     }
+    public List<Clazz> getClassesByStudent(Long studentId){
+        return clazzRepository.findByStudent(studentId);
+    }
 }

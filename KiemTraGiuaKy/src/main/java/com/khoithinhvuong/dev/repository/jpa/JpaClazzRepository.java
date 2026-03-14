@@ -67,4 +67,17 @@ public class JpaClazzRepository implements ClazzRepository {
                         .setParameter("cid", courseId)
                         .getResultList());
     }
+    @Override
+    public List<Clazz> findByStudent(Long studentId){
+
+        return tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT c FROM Clazz c " +
+                                        "JOIN Enrollment e ON c.classId = e.classId " +
+                                        "WHERE e.student.studentId = :sid",
+                                Clazz.class)
+                        .setParameter("sid", studentId)
+                        .getResultList()
+        );
+    }
 }

@@ -1,5 +1,6 @@
 package com.khoithinhvuong.dev.form;
 
+import com.khoithinhvuong.dev.MainFrame;
 import com.khoithinhvuong.dev.config.ServiceFactory;
 import com.khoithinhvuong.dev.config.TransactionManager;
 import com.khoithinhvuong.dev.model.UserAccount;
@@ -41,42 +42,47 @@ public class FormDangNhap {
             frame.dispose(); // đóng form login
         });
         dangnhapButton.addActionListener(e -> {
+
             if (authService.login(usernameBox.getText(), passwordBox.getText())) {
+
                 UserAccount user = userAccountService.getUserByUserName(usernameBox.getText());
 
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(mainPanel);
                 JFrame newFrame = new JFrame();
+
                 switch (user.getRole()) {
+
                     case STUDENT:
                         newFrame.setTitle("Học sinh");
                         FormStudent formStudent = new FormStudent(user);
                         newFrame.setContentPane(formStudent.getMainPanel());
                         break;
-                    case ADMIN:
-                        newFrame.setTitle("Admin");
-                        FormAdmin formAdmin = new FormAdmin();
-                        newFrame.setContentPane(formAdmin.getMainPanel());
-                        break;
+
                     case TEACHER:
                         newFrame.setTitle("Teacher");
                         FormTeacher formTeacher = new FormTeacher(user);
                         newFrame.setContentPane(formTeacher.getMainPanel());
                         break;
+
+                    case ADMIN:
+                        frame.dispose();
+
+                        MainFrame mainFrame = new MainFrame();
+                        mainFrame.setVisible(true);
+                        return;
                 }
-//                JFrame hocsinhFrame = new JFrame("Học sinh");
 
-//                FormHocSinh formHocSinh = new FormHocSinh();
-
-//                hocsinhFrame.setContentPane(formHocSinh.getMainPanel());
                 newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 newFrame.pack();
                 newFrame.setLocationRelativeTo(null);
                 newFrame.setVisible(true);
 
                 frame.dispose();
+
             } else {
-                System.out.println("Đăng nhập thất bại");
+                JOptionPane.showMessageDialog(mainPanel, "Sai tài khoản hoặc mật khẩu!");
             }
+
         });
     }
 

@@ -111,33 +111,39 @@ public class JpaAttendanceRepository implements AttendanceRepository {
     }
 
     @Override
-    public Double calculateAttendanceRate(Long studentId, Long classId) {
+    public List<Object[]> getStudentAttendance(Long classId, LocalDate date) {
 
-        Long present = tx.runInTransaction(em ->
+        return tx.runInTransaction(em ->
                 em.createQuery(
-                                "SELECT COUNT(a) FROM Attendance a " +
+                                "SELECT s.studentId, s.fullName, a.status " +
+                                        "FROM Enrollment e " +
+                                        "JOIN e.student s " +
+                                        "LEFT JOIN Attendance a ON a.student.studentId = s.studentId " +
+                                        "AND a.clazzEntity.classId = :classId " +
+                                        "AND a.date = :date " +
+                                        "WHERE e.classId = :classId",
+                                Object[].class)
+                        .setParameter("classId", classId)
+                        .setParameter("date", date)
+                        .getResultList()
+        );
+    }
+    @Override
+    public Attendance findByStudentClassAndDate(Long studentId, Long classId, LocalDate date) {
+
+        List<Attendance> result = tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT a FROM Attendance a " +
                                         "WHERE a.student.studentId = :studentId " +
                                         "AND a.clazzEntity.classId = :classId " +
-                                        "AND a.status = 'PRESENT'",
-                                Long.class)
+                                        "AND a.date = :date",
+                                Attendance.class)
                         .setParameter("studentId", studentId)
                         .setParameter("classId", classId)
-                        .getSingleResult()
+                        .setParameter("date", date)
+                        .getResultList()
         );
 
-        Long total = tx.runInTransaction(em ->
-                em.createQuery(
-                                "SELECT COUNT(a) FROM Attendance a " +
-                                        "WHERE a.student.studentId = :studentId " +
-                                        "AND a.clazzEntity.classId = :classId",
-                                Long.class)
-                        .setParameter("studentId", studentId)
-                        .setParameter("classId", classId)
-                        .getSingleResult()
-        );
-
-        if (total == 0) return 0.0;
-
-        return present * 100.0 / total;
+        return result.isEmpty() ? null : result.get(0);
     }
 }

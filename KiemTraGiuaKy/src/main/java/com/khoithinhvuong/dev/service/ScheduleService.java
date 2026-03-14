@@ -5,6 +5,7 @@ import com.khoithinhvuong.dev.model.Schedule;
 import com.khoithinhvuong.dev.repository.ScheduleRepository;
 import com.khoithinhvuong.dev.repository.jpa.JpaScheduleRepository;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
@@ -63,5 +64,8 @@ public class ScheduleService {
     public Schedule getScheduleById(Long scheduleId)
     {
         return scheduleRepository.findById( scheduleId);
+    }
+    public List<Schedule> getStudentSchedule(Long studentId, LocalDate date){
+        return scheduleRepository.findByStudentAndDate(studentId, date);
     }
 }

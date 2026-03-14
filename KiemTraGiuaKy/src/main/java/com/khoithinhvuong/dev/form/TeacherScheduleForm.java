@@ -48,6 +48,7 @@ public class TeacherScheduleForm extends JPanel {
     // 4.lấy dữ liệu và hiển thị
     public void loadMySchedule(Long teacherId) {
         // 1. Lấy dữ liệu từ Service
+        System.out.println(teacherId);
         fullScheduleList = scheduleService.getTeacherSchedule(teacherId);
 
         // 2. Đổ dữ liệu vào bảng thông qua hàm dùng chung
@@ -79,7 +80,7 @@ public class TeacherScheduleForm extends JPanel {
 
     private void updateTable(List<Schedule> list) {
         tableModel.setRowCount(0); // Xóa trắng bảng hiện tại
-
+        System.out.println(list);
         // Đổ dữ liệu mới vào bảng
         list.forEach(s -> tableModel.addRow(new Object[]{
                 s.getDate(),

@@ -1,9 +1,13 @@
 package com.khoithinhvuong.dev.form;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class FormAdmin {
+    private static final Logger log = LoggerFactory.getLogger(FormAdmin.class);
     private JPanel mainPanel;
     private JButton studentButton;
     private JPanel menuPanel;
@@ -47,7 +51,22 @@ public class FormAdmin {
         classesButton.addActionListener(e -> showForm("CLAZZ"));
         roomButton.addActionListener(e -> showForm("ROOM"));
         scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
-        enrollmentButton.addActionListener(e -> showPanel(enrollmentForm.getAdminEnrollmentForm()));
+//        enrollmentButton.addActionListener(e -> showPanel(enrollmentForm.getAdminEnrollmentForm()));
+        logoutButton.addActionListener(e -> {
+
+            Window window = SwingUtilities.getWindowAncestor(mainPanel);
+            window.dispose(); // đóng FormTeacher
+
+            JFrame frame = new JFrame("Đăng nhập");
+
+            FormDangNhap form = new FormDangNhap();
+
+            frame.setContentPane(form.getMainPanel());
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
     }
     public void showPanel(JPanel newPanel){
         contentPanel.removeAll();

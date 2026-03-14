@@ -2,6 +2,7 @@ package com.khoithinhvuong.dev.form;
 
 import com.khoithinhvuong.dev.model.UserAccount;
 import javax.swing.*;
+import java.awt.*;
 
 public class FormStudent {
     private JButton myCourseButton;
@@ -21,6 +22,7 @@ public class FormStudent {
         setupListeners();
         StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(loggedInStudentId);
         showPanel(enrollmentForm.getEnrollmentPanel());
+
     }
 
     public JPanel getMainPanel() {
@@ -44,15 +46,37 @@ public class FormStudent {
             StudentLogPaymentAndInvoiceForm paymentForm = new StudentLogPaymentAndInvoiceForm(loggedInStudentId);
             showPanel(paymentForm.getPayAndInvoiceForm());
         });
-
-
-        myCourseButton.addActionListener(e -> {
-
+        myResultButton.addActionListener(e -> {
+            StudentResultsForm form = new StudentResultsForm(loggedInStudentId);
+            showPanel(form.getMainPanel());
         });
 
+        myCourseButton.addActionListener(e -> {
+            StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(loggedInStudentId);
+            showPanel(enrollmentForm.getEnrollmentPanel());
+        });
+        myScheduleButton.addActionListener(e -> {
+
+            StudentScheduleForm scheduleForm =
+                    new StudentScheduleForm(loggedInStudentId);
+
+            showPanel(scheduleForm.getMainPanel());
+        });
 
         logoutButton.addActionListener(e -> {
 
+            Window window = SwingUtilities.getWindowAncestor(mainPanel);
+            window.dispose(); // đóng FormTeacher
+
+            JFrame frame = new JFrame("Đăng nhập");
+
+            FormDangNhap form = new FormDangNhap();
+
+            frame.setContentPane(form.getMainPanel());
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         });
     }
 }

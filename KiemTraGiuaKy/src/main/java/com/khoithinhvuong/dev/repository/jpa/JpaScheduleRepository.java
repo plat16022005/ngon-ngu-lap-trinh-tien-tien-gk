@@ -4,6 +4,7 @@ import com.khoithinhvuong.dev.config.TransactionManager;
 import com.khoithinhvuong.dev.model.Schedule;
 import com.khoithinhvuong.dev.repository.ScheduleRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class JpaScheduleRepository implements ScheduleRepository {
@@ -66,5 +67,21 @@ public class JpaScheduleRepository implements ScheduleRepository {
             }
             return null;
         });
+    }
+    @Override
+    public List<Schedule> findByStudentAndDate(Long studentId, LocalDate date) {
+
+        return tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT s FROM Schedule s " +
+                                        "JOIN Enrollment e ON e.classId = s.clazzEntity.classId " +
+                                        "WHERE e.student.studentId = :sid " +
+                                        "AND s.date = :date",
+                                Schedule.class
+                        )
+                        .setParameter("sid", studentId)
+                        .setParameter("date", date)
+                        .getResultList()
+        );
     }
 }

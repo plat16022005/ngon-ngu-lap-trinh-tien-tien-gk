@@ -23,5 +23,8 @@ public interface ResultsRepository {
     Double calculateAverageScore(Long classId);
 
     boolean existsByStudentAndClass(Long studentId, Long classId);
+    List<Object[]> getStudentsWithResults(Long classId);
+    List<Object[]> getResultsByStudent(Long studentId);
 
+    List<Object[]> getResultsByStudentAndClass(Long studentId, Long classId);
 }

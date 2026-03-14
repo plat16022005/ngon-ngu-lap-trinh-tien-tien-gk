@@ -13,4 +13,5 @@ public interface ClazzRepository {
     // Lọc lớp học theo giáo viên (Sử dụng cho Role Teacher)
     List<Clazz> findByTeacher(Long teacherId);
     List<Clazz> findByCourse(Long courseId);
+    List<Clazz> findByStudent(Long studentId);
 }

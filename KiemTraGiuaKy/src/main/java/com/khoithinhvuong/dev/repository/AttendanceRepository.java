@@ -23,8 +23,9 @@ public interface AttendanceRepository {
 
     List<Attendance> findByClassAndDate(Long classId, LocalDate date);
 
+    Attendance findByStudentClassAndDate(Long studentId, Long classId, LocalDate date);
+
+    List<Object[]> getStudentAttendance(Long classId, LocalDate date);
+
     boolean existsAttendance(Long studentId, Long classId, LocalDate date);
-
-    Double calculateAttendanceRate(Long studentId, Long classId);
-
 }

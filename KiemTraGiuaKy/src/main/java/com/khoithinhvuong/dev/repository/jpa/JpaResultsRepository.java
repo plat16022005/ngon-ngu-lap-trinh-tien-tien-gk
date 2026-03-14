@@ -108,4 +108,50 @@ public class JpaResultsRepository implements ResultsRepository {
 
         return count > 0;
     }
+    @Override
+    public List<Object[]> getStudentsWithResults(Long classId) {
+
+        return tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT s.studentId, s.fullName, r.score, r.grade, r.comment " +
+                                        "FROM Enrollment e " +
+                                        "JOIN e.student s " +
+                                        "LEFT JOIN Results r ON r.student.studentId = s.studentId " +
+                                        "AND r.clazzEntity.classId = :classId " +
+                                        "WHERE e.classId = :classId",
+                                Object[].class)
+                        .setParameter("classId", classId)
+                        .getResultList()
+        );
+    }
+    @Override
+    public List<Object[]> getResultsByStudent(Long studentId){
+
+        return tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT c.className, r.score, r.grade, r.comment " +
+                                        "FROM Results r " +
+                                        "JOIN r.clazzEntity c " +
+                                        "WHERE r.student.studentId = :sid",
+                                Object[].class)
+                        .setParameter("sid", studentId)
+                        .getResultList()
+        );
+    }
+    @Override
+    public List<Object[]> getResultsByStudentAndClass(Long studentId, Long classId){
+
+        return tx.runInTransaction(em ->
+                em.createQuery(
+                                "SELECT c.className, r.score, r.grade, r.comment " +
+                                        "FROM Results r " +
+                                        "JOIN r.clazzEntity c " +
+                                        "WHERE r.student.studentId = :sid " +
+                                        "AND c.classId = :cid",
+                                Object[].class)
+                        .setParameter("sid", studentId)
+                        .setParameter("cid", classId)
+                        .getResultList()
+        );
+    }
 }
