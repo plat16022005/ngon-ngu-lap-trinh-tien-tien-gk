@@ -97,7 +97,7 @@ public class FormDangNhap {
 
                 currentFrame.dispose();
 
-                MainFrame mainFrame = new MainFrame();
+                MainFrame mainFrame = new MainFrame(user.getRelatedId());
                 mainFrame.setVisible(true);
                 break;
         }

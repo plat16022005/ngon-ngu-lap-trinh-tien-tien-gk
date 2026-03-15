@@ -7,14 +7,14 @@ public class MainFrame extends JFrame {
     // Biến static giúp các Form con (Course, Class) gọi điều hướng dễ dàng
     private static FormAdmin adminPanel;
 
-    public MainFrame() {
+    public MainFrame(Long id) {
         setTitle("Giao diện Test Điều hướng - Admin Mode");
         setSize(1100, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Nạp FormAdmin vào Frame chính
-        adminPanel = new FormAdmin();
+        adminPanel = new FormAdmin(id);
         setContentPane(adminPanel.getMainPanel());
     }
 
@@ -27,9 +27,9 @@ public class MainFrame extends JFrame {
         if (adminPanel != null) adminPanel.showScheduleOfClass(classId);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame().setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            new MainFrame().setVisible(true);
+//        });
+//    }
 }

@@ -1,5 +1,7 @@
 package com.khoithinhvuong.dev.form;
 
+import com.khoithinhvuong.dev.service.StaffService;
+import com.khoithinhvuong.dev.model.Staff;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,6 @@ import java.awt.*;
 public class FormAdmin {
     private static final Logger log = LoggerFactory.getLogger(FormAdmin.class);
     private JPanel mainPanel;
-    private JButton studentButton;
     private JPanel menuPanel;
     private JButton teacherButton;
     private JButton courseButton;
@@ -37,24 +38,49 @@ public class FormAdmin {
     private RoomForm roomForm = new RoomForm();
     private AdminEnrollmentForm enrollmentForm = new AdminEnrollmentForm();
     private AdminStaffForm staffForm = new AdminStaffForm();
-
-    public FormAdmin() {
+    private StaffService staffService = new StaffService();
+    public FormAdmin(Long id) {
         contentPanel.setLayout(cardLayout);
-        contentPanel.add(courseForm, "COURSE");
-        contentPanel.add(clazzForm, "CLAZZ");
-        contentPanel.add(scheduleForm, "SCHEDULE");
-        contentPanel.add(teacherForm, "TEACHER");
-        contentPanel.add(roomForm, "ROOM");
-        contentPanel.add(staffForm.getMainPanel(), "STAFF");
 
+
+        Staff staff = staffService.getStaffById(id);
         // Sự kiện Menu bên trái
-        courseButton.addActionListener(e -> showForm("COURSE"));
-        teacherButton.addActionListener(e -> showForm("TEACHER"));
-        classesButton.addActionListener(e -> showForm("CLAZZ"));
-        roomButton.addActionListener(e -> showForm("ROOM"));
-        scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
+        if (staff.getRole().equals("HR") || staff.getRole().equals("Admin"))
+        {
+            contentPanel.add(teacherForm, "TEACHER");
+            teacherButton.addActionListener(e -> showForm("TEACHER"));
+        }
+        else
+        {
+            teacherButton.setVisible(false);
+        }
+        if (staff.getRole().equals("Manager") || staff.getRole().equals("Admin"))
+        {
+            contentPanel.add(courseForm, "COURSE");
+            contentPanel.add(clazzForm, "CLAZZ");
+            contentPanel.add(scheduleForm, "SCHEDULE");
+
+            contentPanel.add(roomForm, "ROOM");
+            courseButton.addActionListener(e -> showForm("COURSE"));
+
+            classesButton.addActionListener(e -> showForm("CLAZZ"));
+            roomButton.addActionListener(e -> showForm("ROOM"));
+            scheduleButton.addActionListener(e -> showForm("SCHEDULE"));
+        }
+        else {
+            courseButton.setVisible(false);
+            classesButton.setVisible(false);
+            roomButton.setVisible(false);
+            scheduleButton.setVisible(false);
+        }
 //        enrollmentButton.addActionListener(e -> showPanel(enrollmentForm.getAdminEnrollmentForm()));
-        staffButton.addActionListener(e -> showForm("STAFF"));
+        if (staff.getRole().equals("Admin"))
+        {
+            contentPanel.add(staffForm.getMainPanel(), "STAFF");
+            staffButton.addActionListener(e -> showForm("STAFF"));
+        }
+        else
+            staffButton.setVisible(false);
         logoutButton.addActionListener(e -> {
 
             Window window = SwingUtilities.getWindowAncestor(mainPanel);

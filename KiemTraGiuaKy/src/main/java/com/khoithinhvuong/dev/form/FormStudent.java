@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FormStudent {
-    private JButton myCourseButton;
+//    private JButton myCourseButton;
     private JButton enrollmentButton;
     private JButton myResultButton;
     private JButton paymentInvoiceButton;
@@ -51,10 +51,10 @@ public class FormStudent {
             showPanel(form.getMainPanel());
         });
 
-        myCourseButton.addActionListener(e -> {
-            StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(loggedInStudentId);
-            showPanel(enrollmentForm.getEnrollmentPanel());
-        });
+//        myCourseButton.addActionListener(e -> {
+//            StudentEnrollmentForm enrollmentForm = new StudentEnrollmentForm(loggedInStudentId);
+//            showPanel(enrollmentForm.getEnrollmentPanel());
+//        });
         myScheduleButton.addActionListener(e -> {
 
             StudentScheduleForm scheduleForm =
